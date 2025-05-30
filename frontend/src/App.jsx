@@ -7,6 +7,7 @@ import { TravelersQuestion } from './components/forms/TravelersQuestion';
 import { BudgetQuestion } from './components/forms/BudgetQuestion';
 import { Dashboard } from './components/dashboard/Dashboard';
 import { useMCP } from './hooks/useMCP';
+import MinimaxAssistant from './components/MinimaxAssistant';
 
 const App = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -78,14 +79,6 @@ const App = () => {
   const steps = [
     <WelcomeScreen key="welcome" onNext={handleNext} />,
     
-    <TravelTypeQuestion
-      key="travel-type"
-      onNext={handleNext}
-      onBack={handleBack}
-      value={searchParams.searchType}
-      onChange={(value) => setSearchParams({...searchParams, searchType: value})}
-    />,
-    
     <DestinationQuestion
       key="destination"
       onNext={handleNext}
@@ -132,7 +125,12 @@ const App = () => {
     />
   ];
 
-  return steps[currentStep];
+  return (
+    <div style={{ position: 'relative' }}>
+      {steps[currentStep]}
+      <MinimaxAssistant />
+    </div>
+  );
 };
 
 export default App;
