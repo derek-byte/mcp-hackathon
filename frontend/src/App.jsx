@@ -5,6 +5,7 @@ import { DestinationQuestion } from './components/forms/DestinationQuestion';
 import { DateQuestion } from './components/forms/DateQuestion';
 import { TravelersQuestion } from './components/forms/TravelersQuestion';
 import { BudgetQuestion } from './components/forms/BudgetQuestion';
+import { PersonalQuestion } from './components/forms/PersonalQuestion';
 import { Dashboard } from './components/dashboard/Dashboard';
 import { useMCP } from './hooks/useMCP';
 import MinimaxAssistant from './components/MinimaxAssistant';
@@ -13,6 +14,8 @@ const App = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [searchParams, setSearchParams] = useState({
     searchType: 'flights',
+    name: '',
+    email: '',
     origin: '',
     destination: '',
     departureDate: '',
@@ -78,7 +81,17 @@ const App = () => {
 
   const steps = [
     <WelcomeScreen key="welcome" onNext={handleNext} />,
-    
+    <PersonalQuestion
+      key="personal"
+      onNext={handleNext}
+      onBack={handleBack}
+      travelType={searchParams.searchType}
+      name={searchParams.name}
+      email={searchParams.email}
+      onNameChange={(value) => setSearchParams({...searchParams, name: value})}
+      onEmailChange={(value) => setSearchParams({...searchParams, email: value})}
+    />,
+
     <DestinationQuestion
       key="destination"
       onNext={handleNext}

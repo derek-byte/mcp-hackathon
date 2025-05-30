@@ -107,7 +107,7 @@ const MinimaxAssistant = () => {
     <div style={{
       position: 'fixed',
       bottom: '20px',
-      left: '20px',
+      right: '20px',
       backgroundColor: '#222',
       color: '#fff',
       borderRadius: '10px',
@@ -128,8 +128,8 @@ const MinimaxAssistant = () => {
         💬 Response: {response || 'None yet'}
       </div>
       <div style={{ marginTop: '0.5rem' }}>
-        <button onClick={handleStartListening} disabled={isListening}>🎙️ Start</button>
-        <button onClick={handleStopListening} disabled={!isListening}>🛑 Stop</button>
+        <button onClick={handleStartListening} disabled={isListening}>Start</button>
+        <button onClick={handleStopListening} disabled={!isListening}>Stop</button>
       </div>
     </div>
   );
