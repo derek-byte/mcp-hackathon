@@ -21,22 +21,14 @@ const MinimaxAssistant = () => {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onstart = () => {
-      console.log('Listening started.');
-    };
-
+    recognition.onstart = () => console.log('Listening started.');
     recognition.onresult = (event) => {
       const userInput = event.results[0][0].transcript;
       console.log('Transcript:', userInput);
       setTranscript(userInput);
       generateAssistantResponse(userInput);
     };
-
-    recognition.onend = () => {
-      console.log('Listening stopped.');
-      setIsListening(false);
-    };
-
+    recognition.onend = () => setIsListening(false);
     recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
@@ -65,7 +57,7 @@ const MinimaxAssistant = () => {
 
     const url = 'https://api.minimaxi.chat/v1/text/chatcompletion_v2';
     const payload = {
-      model: 'MiniMax-Text-01', // official model name
+      model: 'MiniMax-Text-01',
       messages: [
         { role: 'system', content: 'You are a helpful assistant for a travel booking agency.' },
         { role: 'user', content: userInput }
@@ -77,7 +69,7 @@ const MinimaxAssistant = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}` // Replace with your API key
+          Authorization: `Bearer ${apiKey}`
         },
         body: JSON.stringify(payload)
       });
@@ -96,7 +88,6 @@ const MinimaxAssistant = () => {
       const synth = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(assistantReply);
       synth.speak(utterance);
-
     } catch (error) {
       console.error('Error fetching from Minimax API:', error);
       setResponse('Sorry, I could not process that.');
@@ -108,28 +99,64 @@ const MinimaxAssistant = () => {
       position: 'fixed',
       bottom: '20px',
       right: '20px',
-      backgroundColor: '#222',
-      color: '#fff',
-      borderRadius: '10px',
+      backgroundColor: '#fff',
+      color: '#000',
+      borderRadius: '12px',
       padding: '1rem',
       width: '300px',
-      zIndex: 1000,
-      boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      fontFamily: 'sans-serif',
+      zIndex: 1000
     }}>
-      <div><strong>Minimax Assistant</strong></div>
-      <div style={{ marginTop: '0.5rem' }}>
-        {isListening ? (
-          <div>🎤 Listening...</div>
-        ) : (
-          <div>📝 Transcript: {transcript || 'None yet'}</div>
-        )}
+      <div style={{ fontWeight: 600, marginBottom: '0.5rem' }}>Minimax Assistant</div>
+
+      <div style={{
+        fontSize: '0.9rem',
+        color: '#333',
+        marginBottom: '0.5rem',
+        minHeight: '1.2rem'
+      }}>
+        {isListening ? '🎤 Listening...' : `📝 Transcript: ${transcript || 'None'}`}
       </div>
-      <div style={{ marginTop: '0.5rem' }}>
-        💬 Response: {response || 'None yet'}
+
+      <div style={{
+        fontSize: '0.9rem',
+        color: '#333',
+        marginBottom: '0.5rem',
+        minHeight: '1.2rem'
+      }}>
+        💬 Response: {response || 'None'}
       </div>
-      <div style={{ marginTop: '0.5rem' }}>
-        <button onClick={handleStartListening} disabled={isListening}>Start</button>
-        <button onClick={handleStopListening} disabled={!isListening}>Stop</button>
+
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <button
+          onClick={handleStartListening}
+          disabled={isListening}
+          style={{
+            flex: 1,
+            padding: '0.3rem 0.5rem',
+            borderRadius: '6px',
+            border: '1px solid #ddd',
+            background: isListening ? '#f0f0f0' : '#f9f9f9',
+            cursor: isListening ? 'not-allowed' : 'pointer'
+          }}
+        >
+          Start
+        </button>
+        <button
+          onClick={handleStopListening}
+          disabled={!isListening}
+          style={{
+            flex: 1,
+            padding: '0.3rem 0.5rem',
+            borderRadius: '6px',
+            border: '1px solid #ddd',
+            background: !isListening ? '#f0f0f0' : '#f9f9f9',
+            cursor: !isListening ? 'not-allowed' : 'pointer'
+          }}
+        >
+          Stop
+        </button>
       </div>
     </div>
   );
